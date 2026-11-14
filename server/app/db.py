@@ -210,6 +210,14 @@ def set_human_action(evidence_id: str, action: str, note: str) -> None:
         )
 
 
+def update_evidence_chain(evidence_id: str, chain_hash: str, prev_hash: str) -> None:
+    with get_conn() as conn:
+        conn.execute(
+            "UPDATE evidence SET chain_hash = ?, prev_hash = ? WHERE id = ?",
+            (chain_hash, prev_hash, evidence_id),
+        )
+
+
 def _evidence_row(row: sqlite3.Row | None) -> dict[str, Any] | None:
     if not row:
         return None

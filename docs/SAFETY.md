@@ -18,7 +18,8 @@ re-shoot when unsure, and produces an evidence ledger.
 1. A critical checkpoint (`gas_valve`, `power_panel`, `door_lock`) **cannot** be
    closed by a model `pass` alone. `agent.complete()` returns HTTP 409 until a
    human action is recorded.
-2. A `fail` or `unsure` cannot be closed without a human `confirm` or
+2. A `fail` cannot be closed by a human action alone: the checkpoint must be
+   re-captured and pass. An `unsure` can be closed by a human `confirm` or
    `resolved` action.
 3. A suspected flame (CV colour cross-check) forces `fail`, even if the 1B says
    `pass`.

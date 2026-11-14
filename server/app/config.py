@@ -35,7 +35,7 @@ JEV_MODEL = os.getenv("CG_JEV_MODEL", "MiniCPM-OCR-Jev")
 
 # Public base URL is used for the QR code in the PDF report.  It can be a
 # LAN address in a real shop, or http://localhost:8000 in the emulator demo.
-PUBLIC_BASE_URL = os.getenv("CG_PUBLIC_BASE_URL", "http://localhost:8000")
+PUBLIC_BASE_URL = os.getenv("CG_PUBLIC_BASE_URL", "http://127.0.0.1:8010")
 
 # Image-quality gates.  They are intentionally conservative: a bad image
 # should become "unsure" and be re-captured rather than silently passed.
@@ -51,4 +51,4 @@ JEV_REVIEW_SCORE = float(os.getenv("CG_JEV_REVIEW_SCORE", "0.20"))
 ANCHOR_ANGLE_TOLERANCE = float(os.getenv("CG_ANGLE_TOLERANCE", "12"))
 CV_MIN_CONFIDENCE = float(os.getenv("CG_CV_MIN_CONFIDENCE", "0.35"))
 
-VERSION = "0.1.2"
+VERSION = "0.1.3"

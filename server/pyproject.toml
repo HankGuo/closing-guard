@@ -1,6 +1,6 @@
 [project]
 name = "closing-guard"
-version = "0.1.0"
+version = "0.1.3"
 description = "A local-first closing-safety agent for small shops, powered by MiniCPM-V 4.7 1B and MiniCPM-OCR 1.0."
 readme = "../README.md"
 requires-python = ">=3.11"

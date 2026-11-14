@@ -82,7 +82,8 @@ The UI never lets a single model output close a critical item. The report says
 
 The CV confidence gate is intentional: a camera framing change can move the
 dominant line by 80° even when the valve is fine (observed in the desktop fake
-camera test). When CV confidence is low, it is a hint, not a veto.
+camera test). When CV confidence is low but the geometry still conflicts with the
+reference, the verdict becomes `unsure` (never `pass`).
 
 ## Hash chain
 

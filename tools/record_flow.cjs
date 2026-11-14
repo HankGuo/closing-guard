@@ -11,7 +11,7 @@ const path = require('path');
 const fs = require('fs');
 const { execFileSync } = require('child_process');
 
-const ROOT = '/Users/hankia/AISpace/closing-guard';
+const ROOT = process.cwd();
 const VIDEO_DIR = path.join(ROOT, 'runs', 'video', 'flow_raw');
 const OUT = path.join(ROOT, 'runs', 'video', 'flow_real.mp4');
 const BASE = 'http://127.0.0.1:8010';
@@ -63,8 +63,9 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
     const select = page.locator('select[aria-label="使用样张"]').first();
     if (!(await select.count())) break;
 
+    // 第一项先演示"不合格 -> 重拍 -> 合格"这条真实主线
     await step(`第 ${i + 1} 项：选样张`, async () => {
-      await select.selectOption({ index: 1 });
+      await select.selectOption({ index: i === 0 ? 2 : 1 });
     }, 700);
 
     await page.waitForFunction(
@@ -82,6 +83,24 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
         await sleep(8000); // 真实推理
       }
     }, 1200);
+
+    if (i === 0) {
+      await page.waitForTimeout(1500);
+      await step('第 1 项：换合格样张重拍', async () => {
+        await select.selectOption({ index: 1 });
+      }, 900);
+      await page.waitForFunction(
+        () => {
+          const b = [...document.querySelectorAll('button')].find((x) => x.textContent.includes('拍照核验'));
+          return b && !b.disabled;
+        },
+        { timeout: 20000 }
+      ).catch(() => {});
+      await step('第 1 项：重拍核验', async () => {
+        const btn = page.getByRole('button', { name: /拍照核验/ }).first();
+        if (await btn.isEnabled().catch(() => false)) { await btn.click(); await sleep(8000); }
+      }, 1200);
+    }
 
     const confirmBtn = page.getByRole('button', { name: /人工确认通过/ }).first();
     if (await confirmBtn.count()) {

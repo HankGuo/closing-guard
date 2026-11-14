@@ -28,7 +28,7 @@ stop:
 	scripts/stop_models.sh
 
 api:
-	cd server && ../$(PY) -m uvicorn app.main:app --host 0.0.0.0 --port 8010
+	cd server && ../$(PY) -m uvicorn app.main:app --host 127.0.0.1 --port 8010
 
 web:
 	cd web && npm run build
@@ -55,4 +55,4 @@ video:
 	$(PY) tools/make_video.py
 
 clean:
-	rm -rf runs/ses_* runs/closing_guard.db runs/video reports/eval.json reports/eval.md
+	rm -rf runs/ses_* runs/closing_guard.db runs/video

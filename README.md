@@ -1,7 +1,9 @@
 # 打烊 · Closing Guard
 
 > **一个会拒绝签字的闭店安全 Agent。**  
-> 用闲置安卓手机 + 本地 MiniCPM，把“三关一闭”做成一条可核验、可追溯的任务链。
+> 用闲置安卓手机 + 本地 MiniCPM，把“闭店安全检查”做成一条可核验、可追溯的任务链。
+>
+> 当前版本覆盖四项：燃气总阀、配电箱总闸、后门/总门门锁、燃气表读数。**“关水”尚未纳入**（在 [路线图](docs/ROADMAP.md) 里），不把没做的写成做了。
 
 [![CI](https://github.com/HankGuo/closing-guard/actions/workflows/ci.yml/badge.svg)](https://github.com/HankGuo/closing-guard/actions/workflows/ci.yml)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
@@ -11,7 +13,7 @@
 [![MiniCPM-OCR 1.0](https://img.shields.io/badge/MiniCPM--OCR-1.0-0f766e.svg)](https://github.com/OpenBMB/MiniCPM-OCR)
 [![MiniCPM-OCR Jev](https://img.shields.io/badge/MiniCPM--OCR-Jev-2B-0f766e.svg)](https://huggingface.co/openbmb/MiniCPM-OCR-Jev)
 
-[▶ 观看 58 秒演示](https://github.com/HankGuo/closing-guard/releases/download/v0.1.3/demo_v2.mp4)
+[▶ 观看 58 秒演示](https://github.com/HankGuo/closing-guard/releases/download/v0.1.4/demo_v2.mp4)
 
 ![Closing Guard home](docs/screenshots/web_01_home.png)
 
@@ -49,18 +51,18 @@
 
 > 以上三组数字来自公开报道与行业通报口径，作者未逐条独立核实；引用时请以应急管理部门发布的原始通报为准。
 
-商场里的“三关一闭”（关水、关电、关燃气、闭门）有物业逐店检查，标准写得很细：阀门与管道呈 90°、水龙头无水流、燃气报警器常开、厨房自灭系统在工作。街边小店呢？**没人查，靠店员自觉，纸质表/问卷星拍张照，照片里阀门到底关没关，没人知道。**
+商场的闭店检查（关水、关电、关燃气、闭门）有物业逐店检查，标准写得很细：阀门与管道呈 90°、水龙头无水流、燃气报警器常开、厨房自灭系统在工作。街边小店呢？**没人查，靠店员自觉，纸质表/问卷星拍张照，照片里阀门到底关没关，没人知道。**
 
 这个项目把闭店检查变成一条 **Agent 任务链**：
 
-1. 旧手机/模拟器打开取景框，语音/屏幕引导店员逐项拍摄；
+1. 旧手机/模拟器打开取景框，屏幕引导店员逐项拍摄；
 2. 本地 **MiniCPM-V 4.7 1B** 判断语义状态，**MiniCPM-OCR 1.0** 读取表计，**MiniCPM-OCR Jev** 给读数做一致性门控，**OpenCV** 做几何/火焰交叉检查；
 3. 模型不确定 → 要求重拍；异常 → 要求整改；关键项 AI 通过也**必须人工确认**；
-4. 最后生成一份带 **SHA-256 哈希链** 的闭店安全台账（PDF/JSON），扫码可复核。
+4. 最后生成一份带 **SHA-256 哈希链** 的闭店安全台账（PDF，附 /api/verify 校验接口），扫码可复核。
 
 > **它不是“又一个摄像头”。** 它不满足于“拍照留痕”，它会 **拒绝让你点完成**。
 
-![AI says no](docs/screenshots/web_03_camera_verdict.png)
+![关键项 AI 通过后仍需人工确认](docs/screenshots/web_04_gas_confirm.png)
 
 ---
 
@@ -102,7 +104,7 @@ flowchart LR
 | 语义 | MiniCPM-V 4.7 1B（GGUF Q4_K_M） | 判断阀门/门锁/电箱的语义状态 |
 | 读数 | MiniCPM-OCR 1.0（GGUF Q8_0） | 读取表计/温度计/压力表 |
 | 读数核验 | MiniCPM-OCR Jev（GGUF Q4_K_M） | 给 OCR 候选打一致性分：高→自动接受；低→人工 |
-| 证据 | SHA-256 链 + WeasyPrint | 防篡改台账、二维码复核 |
+| 证据 | SHA-256 链 + WeasyPrint | 哈希链台账、校验接口与二维码 |
 
 ### 判定融合（关键设计）
 
@@ -159,9 +161,9 @@ make demo          # 检查环境 → 装依赖 → 下模型 → 起服务 → 
 
 - Python 3.11+、Node 20+、bash
 - 本地推理：`llama.cpp`，要求 `llama-server` 在 PATH（macOS `brew install llama.cpp`）
-- 内存 ≥ 8GB（1B 模型峰值约 5.1GB）、磁盘 ≥ 8GB
+- 内存 ≥ 8GB（三个模型同时常驻建议 16GB；1B 模型峰值约 5.1GB）、磁盘 ≥ 8GB
 - 模型：约 5.5GB，首次由 `make models` 自动下载
-- 不想装环境？直接看 [56 秒演示](https://github.com/HankGuo/closing-guard/releases/download/v0.1.3/demo_v2.mp4) 和 `docs/screenshots/`
+- 不想装环境？直接看 [58 秒演示](https://github.com/HankGuo/closing-guard/releases/download/v0.1.4/demo_v2.mp4) 和 `docs/screenshots/`（桌面端截图；手机端截图由 `scripts/android_e2e.py` 生成到 `runs/android_shots/`）
 - 只想验代码真伪？跑单测，不需要模型：见运行手册「路径 B」
 
 ### 1. 安装
@@ -212,7 +214,7 @@ App 是一个极薄的 WebView 壳：相机、屏幕、触摸来自手机，模�
 | 单元测试（CV / 链哈希） | `make test` | **8 passed** |
 | HTTP 端到端（真实模型） | `make e2e` | **1 passed in 14.38s** |
 | Android WebView 端到端 | `python scripts/android_e2e.py` | **ANDROID_E2E_OK**，哈希链 `valid=true` |
-| Android WebView 渲染 | `docs/screenshots/` | 已用真机/模拟器验证页面能加载并完成核验流程；模拟器相机为虚拟场景，不作为实拍证据 |
+| Android WebView 渲染 | `runs/android_shots/`（脚本生成，不入库） | 已在 Android 模拟器（API 34）验证页面能加载并完成核验流程；模拟器相机是虚拟场景，不作为实拍证据，**未接真机** |
 | 小样本评测 | `make eval` | **8 张图，87.5% 判定准确率，0 false pass**；OCR 测试卡 Jev **0.98**，真实水表 **0.004** → 人工；逐图延迟见 [`reports/eval.md`](reports/eval.md)（随缓存状态变化，非固定值） |
 
 ### 端到端测试做了什么
@@ -242,7 +244,7 @@ App 是一个极薄的 WebView 壳：相机、屏幕、触摸来自手机，模�
 
 完整结果：[`reports/eval.md`](reports/eval.md)
 
-界面与文档配图使用 Wikimedia Commons 授权照片（CC0 / CC BY / 公有领域），归属见 [`data/reference/LICENSES.md`](data/reference/LICENSES.md)；这些是图库照片，不是作者实拍。 / [`reports/eval.json`](reports/eval.json)。
+界面与文档配图使用 Wikimedia Commons 授权照片（CC0 / CC BY / **CC BY-SA** / 公有领域），归属见 [`data/reference/LICENSES.md`](data/reference/LICENSES.md)；这些是图库照片，不是作者实拍。评测明细见 [`reports/eval.json`](reports/eval.json)。三个 MiniCPM 模型权重均为 Apache-2.0；依赖许可为 MIT / BSD / Apache-2.0。
 
 > 这是 **8 张图的小样本试点**，不是统计显著的 benchmark。它故意包含对抗样本：明火、开锁、ON 配电箱、滚动末位水表。它证明的是“链路是通的、失败模式是可见的”，不是“模型已经安全”。
 
@@ -251,7 +253,7 @@ App 是一个极薄的 WebView 壳：相机、屏幕、触摸来自手机，模�
 ## 已知限制
 
 1. **1B 对配电箱开关位置的细粒度判断不可靠。** 在一次运行中，ON 的配电箱被判成 pass；系统靠“关键项强制人工确认”兜底。下一步是用 CV 检测断路器手柄位置，而不是让 1B 硬看。
-2. **OCR 末位不可信。** 真实水表末位是滚动位，OCR 读成 `0.0562`，系统返回 unsure，要求人工确认。表计读数不作为自动计费依据。
+2. **OCR 末位不可信。** 真实水表末位是滚动位，OCR 原始输出 `0.0562`，归一化为 `0.056`，系统返回 unsure，要求人工确认。表计读数不作为自动计费依据。
 3. **测试设备是 Android 模拟器（API 34, arm64）**，相机是虚拟场景；真实旧手机的摄像头/低光/电量表现仍需真机测试。模拟器是真实 Android 运行时，不是 mock API。
 4. **还没有真实门店试点。** 当前完成度是“可运行 Demo + 模拟器端到端 + 真实图片集评测”；下一步是真实门店试点与手机内推理验证。
 5. **Jev 已接入，但它不是“自动判对”。** 测试卡一致性 **0.98** 自动接受；真实水表 **0.004** 转人工。Jev 的阈值仍需在真实门店校准，不能替代人工。
@@ -320,7 +322,7 @@ closing-guard/
 
 ## English abstract
 
-**Closing Guard** is a local-first closing-safety agent for small shops. It turns old Android phones into camera/UI terminals, uses **MiniCPM-V 4.7 1B** for semantic state checks, **MiniCPM-OCR 1.0** for meter readings, and **MiniCPM-OCR Jev** for OCR correctness gating, cross-checks with OpenCV (angle + flame), requires human confirmation for every critical item, and produces a hash-chained PDF/JSON evidence ledger. All inference is local; no cloud API, no video upload. The repo includes a real end-to-end test against the local models, an Android WebView e2e test, and a small adversarial pilot evaluation.
+**Closing Guard** is a local-first closing-safety agent for small shops. It turns old Android phones into camera/UI terminals, uses **MiniCPM-V 4.7 1B** for semantic state checks, **MiniCPM-OCR 1.0** for meter readings, and **MiniCPM-OCR Jev** for OCR correctness gating, cross-checks with OpenCV (angle + flame), requires human confirmation for every critical item, and produces a hash-chained PDF evidence ledger. All inference is local; no cloud API, no video upload. The repo includes a real end-to-end test against the local models, an Android WebView e2e test, and a small adversarial pilot evaluation.
 
 
 ---

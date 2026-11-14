@@ -20,7 +20,7 @@
 | Android WebView e2e: real UI + real models + chain | `python scripts/android_e2e.py` | **ANDROID_E2E_OK**; `valid=true` |
 | Android camera path | UI "拍照核验" on emulator | `source=camera`, quality ok, verdict fail (virtual scene) |
 | Jev OCR gate | `gas_meter_card.jpg` / `water_meter.jpg` | card **0.983** → pass; water meter **0.004** → unsure |
-| Pilot evaluation | `python scripts/eval.py` | **8 samples, 87.5%, 0 false pass, 3.01s mean** |
+| Pilot evaluation | `python scripts/eval.py` | **8 samples, 87.5%, 0 false pass**（延迟以 `reports/eval.json` 为准，每次运行不同） |
 | Web build | `cd web && npm run build` | passed |
 
 ## Environment used

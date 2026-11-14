@@ -1,7 +1,7 @@
 const { chromium } = require('/Users/hankia/AISpace/closing-guard/web/node_modules/playwright');
 const path = require('path');
 
-const ROOT = '/Users/hankia/AISpace/closing-guard';
+const ROOT = process.cwd();
 const SHOTS = path.join(ROOT, 'docs', 'screenshots');
 
 (async () => {

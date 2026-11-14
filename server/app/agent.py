@@ -103,21 +103,25 @@ def _fuse(
 
         # Geometry cross-check: if the handle clearly moved away from the
         # known-good reference, do not accept a semantic "pass".
-        if (
-            cv_result
-            and cv_result.get("delta") is not None
-            and cv_result.get("confidence", 0.0) >= config.CV_MIN_CONFIDENCE
-        ):
+        if cv_result and cv_result.get("delta") is not None:
             tolerance = (
                 checkpoint.angle.tolerance
                 if checkpoint.angle
                 else config.ANCHOR_ANGLE_TOLERANCE
             )
             if cv_result["delta"] > tolerance:
+                cv_conf = float(cv_result.get("confidence", 0.0))
+                if cv_conf >= config.CV_MIN_CONFIDENCE:
+                    return (
+                        "fail",
+                        min(confidence, cv_conf),
+                        f"几何交叉检查未通过：{cv_result.get('reason', '')}",
+                    )
+                # 几何证据指向“不合格”，但置信不足：不允许放行，至少要求人工确认。
                 return (
-                    "fail",
-                    min(confidence, cv_result.get("confidence", 0.0)),
-                    f"几何交叉检查未通过：{cv_result.get('reason', '')}",
+                    "unsure",
+                    min(confidence, cv_conf),
+                    f"几何交叉检查与语义判断冲突（置信度 {cv_conf:.2f}）：{cv_result.get('reason', '')}，请重拍或人工确认",
                 )
 
         if verdict == "pass" and confidence >= config.VLM_MIN_CONFIDENCE:
@@ -130,6 +134,8 @@ def _fuse(
         reading = ocr_result.get("reading")
         jev_result = ocr_result.get("jev") or {}
         prob = jev_result.get("prob_1")
+        if prob is None:
+            return "unsure", 0.0, "Jev 一致性检查不可用（超时或服务未就绪），不能自动放行，请人工确认"
         if reading and prob is not None and float(prob) < config.JEV_REVIEW_SCORE:
             return "unsure", float(prob), "Jev 一致性分数很低，读数与图像可能不一致，请人工确认"
         if reading and prob is not None and float(prob) < config.JEV_MIN_SCORE:
@@ -325,7 +331,9 @@ def complete(session_id: str) -> SessionOut:
         if not latest:
             unresolved.append(f"{checkpoint.name}：未检查")
             continue
-        if latest["verdict"] in {"fail", "unsure"} and latest["human_action"] not in {
+        if latest["verdict"] == "fail":
+            unresolved.append(f"{checkpoint.name}：判定未通过，需重拍后再完成")
+        elif latest["verdict"] == "unsure" and latest["human_action"] not in {
             "confirm",
             "resolved",
         }:
@@ -359,10 +367,21 @@ def verify_chain(session_id: str) -> dict[str, Any]:
         raise ValueError("session not found")
     evidence = db.list_evidence(session_id)
     prev = _sha256(session_id.encode("utf-8"))
-    ok = True
+    ok = bool(evidence)
     for item in evidence:
+        # 链字段自洽
+        if item.get("prev_hash") != prev:
+            ok = False
+            break
         expected = _chain_hash(prev, _chain_payload(item))
         if expected != item["chain_hash"]:
+            ok = False
+            break
+        # 证据图片仍与入库时的 SHA-256 一致
+        path = Path(item["image_path"])
+        if not path.is_absolute():
+            path = config.RUNS_DIR / path
+        if not path.exists() or _sha256(path.read_bytes()) != item["image_sha256"]:
             ok = False
             break
         prev = item["chain_hash"]

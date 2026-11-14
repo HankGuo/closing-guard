@@ -42,7 +42,7 @@ These are warm-cache measurements. A cold process load adds a few seconds.
 | Prompt processing | **156 tok/s** |
 | Generation | **40 tok/s** |
 | Synthetic gas-meter card | `reading=00123.456`, `unit=m³`, pass |
-| Real water meter | `reading=0.0562` (expected stable digits `00565`); returns **unsure** because the last digit is rolling |
+| Real water meter | `reading=0.056`（原始 OCR 文本 `0.0562`，归一化到 3 位小数）; returns **unsure** because the last digit is rolling |
 | PDF/receipt text | strong on large Chinese text; not a substitute for a dedicated meter OCR + human confirmation |
 
 ## MiniCPM-OCR Jev on M1
@@ -64,7 +64,7 @@ threshold is calibrated on the test card, not on a store.
 - 8 images, 4 checkpoints, 2 images per checkpoint.
 - **Verdict accuracy: 87.5%**
 - **False pass on expected-fail items: 0**
-- Mean capture latency: **3.01 s** (warm cache)
+- Mean capture latency: 见 `reports/eval.json`（2026-11-14 运行为 **1.85 s**，warm cache；每次运行不同）
 - The power-panel ON image returned `unsure` in the final run; in an earlier run
   the 1B returned `pass` with 0.8 confidence on the same ON panel. This variance
   is why critical items require human confirmation.

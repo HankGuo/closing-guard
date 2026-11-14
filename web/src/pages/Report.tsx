@@ -103,7 +103,7 @@ export default function ReportPage() {
           <div>
             <h3>证据链</h3>
             <p className="small muted">
-              每张照片的 SHA-256、结论和人工动作依次串成哈希链。任何一张照片或结论被改动，最终哈希都会变化。
+              每张照片的 SHA-256 与判定结论依次串成哈希链。校验接口会重算图片哈希与整条链；照片被替换、记录被删改都会报 valid=false。
             </p>
             <div className="kv">
               <span className="k">最终链哈希</span><span className="v mono">{session.chain_hash ?? "未完成"}</span>

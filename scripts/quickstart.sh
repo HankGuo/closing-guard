@@ -90,8 +90,11 @@ step "3/5 准备模型权重"
 if [ "$NO_MODELS" -eq 1 ]; then
   ok "--no-models，跳过下载"
 elif [ -f "$MODELS_DIR/MiniCPM-V-4_7-1B-Q4_K_M.gguf" ] && \
+     [ -f "$MODELS_DIR/mmproj-v47-f16.gguf" ] && \
      [ -f "$MODELS_DIR/MiniCPM-OCR-1_0-Q8_0.gguf" ] && \
-     [ -f "$MODELS_DIR/MiniCPM-OCR-Jev-Q4_K_M.gguf" ]; then
+     [ -f "$MODELS_DIR/mmproj-ocr-4x.gguf" ] && \
+     [ -f "$MODELS_DIR/MiniCPM-OCR-Jev-Q4_K_M.gguf" ] && \
+     [ -f "$MODELS_DIR/mmproj-jev-f16.gguf" ]; then
   ok "模型已下载，跳过（$MODELS_DIR）"
 else
   echo "  下载约 5.5GB 到 $MODELS_DIR（首次较慢，可中断重跑）"

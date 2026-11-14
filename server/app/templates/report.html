@@ -200,7 +200,7 @@
       <div style="font-weight:800; color:#0f3d38;">扫码复核这份台账</div>
       <div class="small">验证地址：{{ verify_url }}</div>
       <div class="small">最终链哈希：<span class="mono">{{ session.chain_hash or '（未完成）' }}</span></div>
-      <div class="small">任何一张照片或一条结论被改动，链哈希都会变化。</div>
+      <div class="small">校验接口会重算图片 SHA-256 与整条链；照片被替换或记录被删改都会报 valid=false。</div>
     </div>
   </div>
 

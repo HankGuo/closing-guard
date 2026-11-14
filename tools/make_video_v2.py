@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Closing Guard — demo video v2 (real UI footage + captions + single narrator).
 
-Why v2: the v1 video was slides + TTS, which reads as AI-generated.
+Why v2: the v1 video relied on slides; v2 uses recorded product footage.
 v2 uses the recorded product flow (tools/record_flow.cjs) as primary footage,
 adds short captions, and one calm male narration. No slide decks.
 
@@ -168,17 +168,20 @@ def main():
     still(OUTDIR / "s1_title.png", 3.0, OUTDIR / "a1.mp4")
     segs.append(OUTDIR / "a1.mp4")
 
-    trim_with_caption(FLOW, 2.0, 25.0, "以前闭店：拍张照，发群里", OUTDIR / "a2.mp4")
+    trim_with_caption(FLOW, 8.0, 22.0, "以前闭店：拍张照，发群里", OUTDIR / "a2.mp4")
     segs.append(OUTDIR / "a2.mp4")
 
-    trim_with_caption(FLOW, 139.5, 10.5, "现在：每项留证据，最后出一份台账", OUTDIR / "a3.mp4")
+    trim_with_caption(FLOW, 55.0, 16.0, "AI 判不合格：必须重拍或整改，不能点完成", OUTDIR / "a3.mp4")
     segs.append(OUTDIR / "a3.mp4")
+
+    trim_with_caption(FLOW, 170.0, 14.0, "每项留证据，最后出一份带哈希链的台账", OUTDIR / "a3b.mp4")
+    segs.append(OUTDIR / "a3b.mp4")
 
     still(OUTDIR / "s4_numbers.png", 5.0, OUTDIR / "a4.mp4")
     segs.append(OUTDIR / "a4.mp4")
 
     # Web 端真实截图（真实样张上传，非模拟器虚拟相机）
-    for name, out in [("web_05_panel.png", "a5.mp4"), ("web_06_door.png", "a6.mp4"), ("web_08_report.png", "a6b.mp4")]:
+    for name, out in [("web_04_gas_confirm.png", "a5.mp4"), ("web_08_report.png", "a6.mp4")]:
         src = ROOT / "docs" / "screenshots" / name
         run(["ffmpeg", "-y", "-loop", "1", "-t", "3.2", "-i", str(src),
              "-vf", f"scale=-2:{H-40},pad={W}:{H}:(ow-iw)/2:(oh-ih)/2:color=0x101214",
@@ -203,7 +206,7 @@ def main():
     )
 
     # 音轨：静音底 + 旁白按时间点插入
-    offsets = {"l1": 4.0, "l2": 8.0, "l3": 27.5, "l4": 40.0, "l5": 52.0}
+    offsets = {"l1": 4.0, "l2": 8.0, "l3": 30.0, "l4": 48.0, "l5": 58.0}
     inputs = ["-f", "lavfi", "-t", str(total), "-i", "anullsrc=r=44100:cl=stereo"]
     filters = []
     for i, (key, off) in enumerate(offsets.items(), start=1):

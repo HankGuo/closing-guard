@@ -12,6 +12,13 @@ interface Sample {
   url: string;
 }
 
+const SAMPLE_PREFIX: Record<string, RegExp> = {
+  gas_valve: /^gas_(valve|stove)/,
+  power_panel: /^power_panel/,
+  door_lock: /^door_/,
+  gas_meter: /^(gas_meter|water_meter)/,
+};
+
 export default function CameraCard({ checkpoint, busy, onCapture }: Props) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -70,6 +77,9 @@ export default function CameraCard({ checkpoint, busy, onCapture }: Props) {
       .then(setSamples)
       .catch(() => setSamples([]));
   }, []);
+
+  const pattern = SAMPLE_PREFIX[checkpoint.id];
+  const usableSamples = pattern ? samples.filter((s) => pattern.test(s.name)) : samples;
 
   const capture = () => {
     const video = videoRef.current;
@@ -144,7 +154,7 @@ export default function CameraCard({ checkpoint, busy, onCapture }: Props) {
             onChange={(e) => onFile(e.target.files?.[0])}
           />
         </label>
-        {samples.length > 0 && (
+        {usableSamples.length > 0 && (
           <select
             className="select btn-sm"
             style={{ width: 150 }}
@@ -153,7 +163,7 @@ export default function CameraCard({ checkpoint, busy, onCapture }: Props) {
             aria-label="使用样张"
           >
             <option value="">使用样张…</option>
-            {samples.map((s) => (
+            {usableSamples.map((s) => (
               <option key={s.name} value={s.url}>{s.name}</option>
             ))}
           </select>
