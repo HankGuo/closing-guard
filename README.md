@@ -161,7 +161,7 @@ make demo          # 检查环境 → 装依赖 → 下模型 → 起服务 → 
 - 本地推理：`llama.cpp`，要求 `llama-server` 在 PATH（macOS `brew install llama.cpp`）
 - 内存 ≥ 8GB（1B 模型峰值约 5.1GB）、磁盘 ≥ 8GB
 - 模型：约 5.5GB，首次由 `make models` 自动下载
-- 不想装环境？直接看 [56 秒演示](https://github.com/HankGuo/closing-guard/releases/download/v0.1.2/demo_v2.mp4) 和 `docs/screenshots/`
+- 不想装环境？直接看 [56 秒演示](https://github.com/HankGuo/closing-guard/releases/download/v0.1.3/demo_v2.mp4) 和 `docs/screenshots/`
 - 只想验代码真伪？跑单测，不需要模型：见运行手册「路径 B」
 
 ### 1. 安装

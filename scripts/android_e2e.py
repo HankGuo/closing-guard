@@ -23,7 +23,7 @@ sys.path.insert(0, str(ROOT))
 
 from tools.cdp import CDP  # noqa: E402
 
-SHOTS = ROOT / "docs" / "screenshots"
+SHOTS = ROOT / "runs" / "android_shots"
 SHOTS.mkdir(parents=True, exist_ok=True)
 
 
