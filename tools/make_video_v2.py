@@ -127,12 +127,12 @@ def main():
     card(OUTDIR / "s4_numbers.png", [
         ("8 张对抗样本 · 判定准确率", 26, (110, 116, 114), "regular"),
         ("87.5%", 132, INK, "bold"),
-        ("false pass = 0    平均 3.0 秒", 30, (70, 76, 74), "regular"),
+        ("false pass = 0    延迟见评测报告", 30, (70, 76, 74), "regular"),
     ], bg=PAPER, fg=INK, footer="M1 16GB · 本地 llama.cpp · 无云 API")
 
     card(OUTDIR / "s6_end.png", [
-        ("样张与模拟器演示", 30, (170, 180, 178), "regular"),
-        ("尚未进入真实门店", 22, (140, 148, 146), "regular"),
+        ("样张与桌面端演示", 30, (170, 180, 178), "regular"),
+        ("模拟器 + 样张上传，未接真机", 22, (140, 148, 146), "regular"),
         ("github.com/HankGuo/closing-guard", 26, PAPER, "regular"),
     ], accent=ACCENT)
 

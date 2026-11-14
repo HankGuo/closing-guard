@@ -13,7 +13,7 @@
 [![MiniCPM-OCR 1.0](https://img.shields.io/badge/MiniCPM--OCR-1.0-0f766e.svg)](https://github.com/OpenBMB/MiniCPM-OCR)
 [![MiniCPM-OCR Jev](https://img.shields.io/badge/MiniCPM--OCR-Jev-2B-0f766e.svg)](https://huggingface.co/openbmb/MiniCPM-OCR-Jev)
 
-[▶ 观看 58 秒演示](https://github.com/HankGuo/closing-guard/releases/download/v0.1.4/demo_v2.mp4)
+[▶ 观看 58 秒演示](https://github.com/HankGuo/closing-guard/releases/download/v0.1.5/demo_v2.mp4)
 
 ![Closing Guard home](docs/screenshots/web_01_home.png)
 
@@ -163,7 +163,7 @@ make demo          # 检查环境 → 装依赖 → 下模型 → 起服务 → 
 - 本地推理：`llama.cpp`，要求 `llama-server` 在 PATH（macOS `brew install llama.cpp`）
 - 内存 ≥ 8GB（三个模型同时常驻建议 16GB；1B 模型峰值约 5.1GB）、磁盘 ≥ 8GB
 - 模型：约 5.5GB，首次由 `make models` 自动下载
-- 不想装环境？直接看 [58 秒演示](https://github.com/HankGuo/closing-guard/releases/download/v0.1.4/demo_v2.mp4) 和 `docs/screenshots/`（桌面端截图；手机端截图由 `scripts/android_e2e.py` 生成到 `runs/android_shots/`）
+- 不想装环境？直接看 [58 秒演示](https://github.com/HankGuo/closing-guard/releases/download/v0.1.5/demo_v2.mp4) 和 `docs/screenshots/`（桌面端截图；手机端截图由 `scripts/android_e2e.py` 生成到 `runs/android_shots/`）
 - 只想验代码真伪？跑单测，不需要模型：见运行手册「路径 B」
 
 ### 1. 安装
@@ -244,7 +244,7 @@ App 是一个极薄的 WebView 壳：相机、屏幕、触摸来自手机，模�
 
 完整结果：[`reports/eval.md`](reports/eval.md)
 
-界面与文档配图使用 Wikimedia Commons 授权照片（CC0 / CC BY / **CC BY-SA** / 公有领域），归属见 [`data/reference/LICENSES.md`](data/reference/LICENSES.md)；这些是图库照片，不是作者实拍。评测明细见 [`reports/eval.json`](reports/eval.json)。三个 MiniCPM 模型权重均为 Apache-2.0；依赖许可为 MIT / BSD / Apache-2.0。
+桌面截图由 Playwright + Chromium 虚拟摄像头 + 样张上传录制，**不作为真机或实拍证据**。界面与文档配图使用 Wikimedia Commons 授权照片（CC0 / CC BY / **CC BY-SA** / 公有领域），归属见 [`data/reference/LICENSES.md`](data/reference/LICENSES.md)；这些是图库照片，不是作者实拍。评测明细见 [`reports/eval.json`](reports/eval.json)。三个 MiniCPM 模型权重均为 Apache-2.0；依赖许可为 MIT / BSD / Apache-2.0。
 
 > 这是 **8 张图的小样本试点**，不是统计显著的 benchmark。它故意包含对抗样本：明火、开锁、ON 配电箱、滚动末位水表。它证明的是“链路是通的、失败模式是可见的”，不是“模型已经安全”。
 
