@@ -1,0 +1,9 @@
+checkpoint,image,expected,expected_reading,notes,source
+gas_valve,gas_valve_closed.jpg,pass,,Real propane cylinder valve photo; reference image for the angle check.,Wikimedia Commons
+gas_valve,gas_stove_flame.jpg,fail,,Open gas flame means the gas is not shut. The 1B VLM alone can miss this; the CV flame cross-check forces FAIL.,Wikimedia Commons
+power_panel,power_panel_off.jpg,pass,,ABB DIN-rail breakers; handles in the down/OFF position.,Wikimedia Commons
+power_panel,power_panel_on.jpg,fail,,Eaton panel; most breaker handles are in the up/ON position. This is the known hard case for the 1B model; mandatory human confirmation is the mitigation.,Wikimedia Commons
+door_lock,door_locked.jpg,pass,,Padlock shackle closed through the chain; real photo.,Wikimedia Commons
+door_lock,door_unlocked.jpg,fail,,Padlock shackle open with keys; real photo.,Wikimedia Commons
+gas_meter,gas_meter_card.jpg,pass,00123.456,Generated OCR test card with large Chinese text; used to validate the OCR path.,Synthetic test card (generated)
+gas_meter,water_meter.jpg,unsure,00565,Real water meter photo; the last digit is a rolling digit. OCR reads 0.0562 and must be human-confirmed; this is a deliberate uncertainty case.,Wikimedia Commons

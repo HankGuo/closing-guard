@@ -1,0 +1,37 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+
+# Local runtime data
+runs/
+!runs/.gitkeep
+models/
+*.gguf
+*.y4m
+*.webm
+*.mp4
+
+# Node / web
+web/node_modules/
+web/dist/
+web/.vite/
+npm-debug.log*
+
+# Android
+android/.gradle/
+android/app/build/
+android/build/
+android/local.properties
+android/.idea/
+*.iml
+*.apk
+
+# OS / IDE
+.DS_Store
+.idea/
+.vscode/
+*.swp

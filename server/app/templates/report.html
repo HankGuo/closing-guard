@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <title>闭店安全台账 · {{ session.store_name }}</title>
+  <style>
+    @page { size: A4; margin: 16mm 14mm 16mm 14mm; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", sans-serif;
+      color: #17211f;
+      background: #ffffff;
+      font-size: 10.5pt;
+      line-height: 1.55;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 3px solid #0f766e;
+      padding-bottom: 10px;
+      margin-bottom: 14px;
+    }
+    .brand { display: flex; gap: 10px; align-items: center; }
+    .logo {
+      width: 38px; height: 38px; border-radius: 10px;
+      background: #0f766e; color: #fff; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16pt;
+    }
+    h1 { margin: 0; font-size: 18pt; letter-spacing: 0.5px; }
+    .sub { color: #5b6b67; font-size: 9pt; margin-top: 2px; }
+    .badge {
+      display: inline-block; padding: 4px 10px; border-radius: 999px;
+      font-size: 9pt; font-weight: 700; letter-spacing: 0.5px;
+    }
+    .badge.completed { background: #d1fae5; color: #065f46; }
+    .badge.open { background: #fef3c7; color: #92400e; }
+    .meta {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+      margin: 10px 0 14px;
+    }
+    .meta div {
+      background: #f3f7f6; border: 1px solid #e2ebe8; border-radius: 8px;
+      padding: 8px 10px;
+    }
+    .meta .k { color: #6b7c78; font-size: 8.5pt; }
+    .meta .v { font-weight: 700; font-size: 10pt; margin-top: 2px; }
+    .summary {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+      margin: 10px 0 16px;
+    }
+    .summary div { border-radius: 8px; padding: 10px; color: #fff; }
+    .summary .num { font-size: 18pt; font-weight: 800; line-height: 1; }
+    .summary .lab { font-size: 8.5pt; opacity: 0.9; margin-top: 4px; }
+    .pass { background: #0f766e; }
+    .fail { background: #b91c1c; }
+    .unsure { background: #b45309; }
+    .pending { background: #4b5563; }
+    h2 { font-size: 12pt; margin: 18px 0 8px; color: #0f3d38; }
+    .item {
+      border: 1px solid #dfe8e5; border-radius: 10px; padding: 10px;
+      margin-bottom: 10px; page-break-inside: avoid;
+    }
+    .item-head { display: flex; justify-content: space-between; align-items: center; }
+    .item-title { font-weight: 800; font-size: 11pt; }
+    .verdict { font-weight: 800; font-size: 9pt; padding: 3px 9px; border-radius: 999px; }
+    .verdict.pass { background: #d1fae5; color: #065f46; }
+    .verdict.fail { background: #fee2e2; color: #991b1b; }
+    .verdict.unsure { background: #fef3c7; color: #92400e; }
+    .verdict.pending { background: #e5e7eb; color: #374151; }
+    .item-body { display: flex; gap: 10px; margin-top: 8px; }
+    .item-body img {
+      width: 150px; height: 112px; object-fit: cover;
+      border-radius: 6px; border: 1px solid #e5eeeb;
+    }
+    .kv { font-size: 9pt; }
+    .kv b { color: #0f3d38; }
+    .reason { margin-top: 6px; color: #374151; }
+    .human { margin-top: 4px; color: #0f766e; font-weight: 600; }
+    table { width: 100%; border-collapse: collapse; font-size: 8.5pt; }
+    th, td { border-bottom: 1px solid #e5eeeb; padding: 6px 4px; text-align: left; vertical-align: top; }
+    th { color: #5b6b67; font-weight: 700; }
+    .mono { font-family: "SF Mono", Menlo, monospace; font-size: 7.5pt; word-break: break-all; }
+    .verify {
+      display: flex; gap: 14px; align-items: center;
+      border: 1px dashed #9cc7bf; background: #f0fdfa;
+      border-radius: 10px; padding: 12px; margin-top: 14px;
+    }
+    .verify img { width: 86px; height: 86px; }
+    .verify .small { font-size: 8.5pt; color: #4b5f5a; }
+    .disclaimer {
+      margin-top: 16px; padding: 10px; border-radius: 8px;
+      background: #fff7ed; border: 1px solid #fed7aa;
+      color: #7c2d12; font-size: 8.5pt;
+    }
+    .footer { margin-top: 18px; color: #7a8b87; font-size: 8pt; text-align: center; }
+    .no-image {
+      width: 150px; height: 112px; border-radius: 6px;
+      background: #f3f7f6; border: 1px dashed #cbd5d1;
+      display: flex; align-items: center; justify-content: center;
+      color: #94a3a0; font-size: 8pt;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="brand">
+      <div class="logo">打</div>
+      <div>
+        <h1>闭店安全台账</h1>
+        <div class="sub">Closing Guard · 本地 MiniCPM 核验 · 三关一闭</div>
+      </div>
+    </div>
+    <div>
+      <span class="badge {{ 'completed' if session.status == 'completed' else 'open' }}">
+        {{ '已闭环' if session.status == 'completed' else '进行中' }}
+      </span>
+    </div>
+  </div>
+
+  <div class="meta">
+    <div><div class="k">门店</div><div class="v">{{ session.store_name }}</div></div>
+    <div><div class="k">检查表</div><div class="v">{{ checklist.name }}</div></div>
+    <div><div class="k">检查人</div><div class="v">{{ session.operator }}</div></div>
+    <div><div class="k">生成时间</div><div class="v">{{ generated_at }}</div></div>
+  </div>
+
+  <div class="summary">
+    <div class="pass"><div class="num">{{ counts.pass }}</div><div class="lab">通过</div></div>
+    <div class="fail"><div class="num">{{ counts.fail }}</div><div class="lab">未通过</div></div>
+    <div class="unsure"><div class="num">{{ counts.unsure }}</div><div class="lab">待确认</div></div>
+    <div class="pending"><div class="num">{{ counts.pending }}</div><div class="lab">未检查</div></div>
+  </div>
+
+  <h2>逐项核验记录</h2>
+  {% for item in items %}
+  <div class="item">
+    <div class="item-head">
+      <div class="item-title">{{ loop.index }}. {{ item.config.name }}</div>
+      <span class="verdict {{ item.status }}">{{ {'pass':'通过','fail':'未通过','unsure':'待确认','pending':'未检查'}[item.status] }}</span>
+    </div>
+    <div class="item-body">
+      {% if item.image %}
+      <img src="{{ item.image }}" alt="{{ item.config.name }}" />
+      {% else %}
+      <div class="no-image">暂无照片</div>
+      {% endif %}
+      <div class="kv">
+        {% if item.evidence %}
+        <div><b>时间：</b>{{ item.evidence.captured_at_fmt }}</div>
+        <div><b>来源：</b>{{ item.evidence.source }}</div>
+        <div><b>置信度：</b>{{ '%.2f'|format(item.evidence.confidence) }}</div>
+        {% if item.evidence.ocr and item.evidence.ocr.reading %}
+        <div><b>读数：</b>{{ item.evidence.ocr.reading }} {{ item.evidence.ocr.unit or '' }}</div>
+        {% endif %}
+        {% if item.evidence.ocr and item.evidence.ocr.jev and item.evidence.ocr.jev.prob_1 is not none %}
+        <div><b>Jev 一致性：</b>{{ '%.2f'|format(item.evidence.ocr.jev.prob_1) }}</div>
+        {% endif %}
+        {% if item.evidence.cv and item.evidence.cv.delta is not none %}
+        <div><b>几何差：</b>{{ item.evidence.cv.delta }}°</div>
+        {% endif %}
+        <div class="reason"><b>结论：</b>{{ item.evidence.reason }}</div>
+        {% if item.evidence.human_action %}
+        <div class="human">人工动作：{{ {'confirm':'确认通过','reject':'驳回','resolved':'整改完成'}.get(item.evidence.human_action, item.evidence.human_action) }}
+          {% if item.evidence.human_note %} · {{ item.evidence.human_note }}{% endif %}
+        </div>
+        {% endif %}
+        {% else %}
+        <div>尚未检查。</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+
+  <h2>证据链</h2>
+  <table>
+    <thead>
+      <tr><th>#</th><th>检查点</th><th>结论</th><th>置信度</th><th>图片 SHA-256</th><th>链哈希</th></tr>
+    </thead>
+    <tbody>
+      {% for ev in evidence %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ ev.checkpoint_id }}</td>
+        <td>{{ ev.verdict }}</td>
+        <td>{{ '%.2f'|format(ev.confidence) }}</td>
+        <td class="mono">{{ ev.image_sha256[:24] }}…</td>
+        <td class="mono">{{ ev.chain_hash[:24] }}…</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="verify">
+    <img src="{{ qr }}" alt="verify QR" />
+    <div>
+      <div style="font-weight:800; color:#0f3d38;">扫码复核这份台账</div>
+      <div class="small">验证地址：{{ verify_url }}</div>
+      <div class="small">最终链哈希：<span class="mono">{{ session.chain_hash or '（未完成）' }}</span></div>
+      <div class="small">任何一张照片或一条结论被改动，链哈希都会变化。</div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    <b>安全声明：</b>本台账是闭店安全的辅助检查与记录工具，不替代消防、燃气、市场监管等法定检查，
+    也不构成任何形式的安全保证。模型可能出错；所有“未通过/待确认”项均应由人工复核并整改。
+    如闻到燃气味、发现明火或电气异常，请立即撤离并拨打 119/燃气公司电话，不要依赖本系统。
+  </div>
+
+  <div class="footer">
+    Closing Guard v{{ version }} · 本地推理，不上传云端 · 生成于 {{ generated_at }}
+  </div>
+</body>
+</html>

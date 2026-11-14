@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use this project, please cite it as below."
+title: "Closing Guard (打烊): a local-first closing-safety agent with MiniCPM"
+abstract: >-
+  A local-first agent that turns old Android phones into closing-safety
+  terminals, using MiniCPM-V 4.7 1B for semantic checks, MiniCPM-OCR 1.0 for
+  meter readings, and a hash-chained evidence ledger.
+authors:
+  - family-names: "Hank"
+    given-names: "Guo"
+    alias: "HankGuo"
+version: "0.1.2"
+date-released: "2026-11-14"
+license: "Apache-2.0"
+repository-code: "https://github.com/HankGuo/closing-guard"
+keywords:
+  - minicpm
+  - on-device-ai
+  - agent
+  - safety
+  - android
+  - llama.cpp

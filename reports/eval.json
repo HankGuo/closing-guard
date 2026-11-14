@@ -1,0 +1,157 @@
+{
+  "generated_at": "2026-11-14T16:35:22+0800",
+  "api": "http://127.0.0.1:8010",
+  "n": 8,
+  "accuracy": 0.875,
+  "false_pass_count": 0,
+  "false_pass_rate_on_expected_fail": 0.0,
+  "mean_latency_s": 1.85,
+  "per_checkpoint": {
+    "gas_valve": {
+      "n": 2,
+      "accuracy": 1.0,
+      "false_pass": 0,
+      "mean_latency_s": 1.11
+    },
+    "power_panel": {
+      "n": 2,
+      "accuracy": 0.5,
+      "false_pass": 0,
+      "mean_latency_s": 1.38
+    },
+    "door_lock": {
+      "n": 2,
+      "accuracy": 1.0,
+      "false_pass": 0,
+      "mean_latency_s": 0.98
+    },
+    "gas_meter": {
+      "n": 2,
+      "accuracy": 1.0,
+      "false_pass": 0,
+      "mean_latency_s": 3.95
+    }
+  },
+  "results": [
+    {
+      "checkpoint": "gas_valve",
+      "image": "gas_valve_closed.jpg",
+      "expected": "pass",
+      "actual": "pass",
+      "confidence": 0.8,
+      "reason": "阀门把手与管道大致垂直且画面无火焰或烟雾，阀门本体完整，符合关闭状态合格标准。",
+      "reading": null,
+      "expected_reading": "",
+      "jev_prob": null,
+      "latency_s": 1.16,
+      "source": "Wikimedia Commons",
+      "notes": "Real propane cylinder valve photo; reference image for the angle check.",
+      "session_id": "ses_87fc6077b0fb"
+    },
+    {
+      "checkpoint": "gas_valve",
+      "image": "gas_stove_flame.jpg",
+      "expected": "fail",
+      "actual": "fail",
+      "confidence": 0.85,
+      "reason": "火焰颜色交叉检查：画面中检测到明火/高饱和火焰色，燃气未关闭",
+      "reading": null,
+      "expected_reading": "",
+      "jev_prob": null,
+      "latency_s": 1.06,
+      "source": "Wikimedia Commons",
+      "notes": "Open gas flame means the gas is not shut. The 1B VLM alone can miss this; the CV flame cross-check forces FAIL.",
+      "session_id": "ses_1ad03e05fc1e"
+    },
+    {
+      "checkpoint": "power_panel",
+      "image": "power_panel_off.jpg",
+      "expected": "pass",
+      "actual": "pass",
+      "confidence": 0.8,
+      "reason": "所有开关手柄均朝下表示 OFF（断电），除部分常开回路外，其余均处于断电状态，符合闭店安全巡检标准。",
+      "reading": null,
+      "expected_reading": "",
+      "jev_prob": null,
+      "latency_s": 1.48,
+      "source": "Wikimedia Commons",
+      "notes": "ABB DIN-rail breakers; handles in the down/OFF position.",
+      "session_id": "ses_83beda43e2fc"
+    },
+    {
+      "checkpoint": "power_panel",
+      "image": "power_panel_on.jpg",
+      "expected": "fail",
+      "actual": "unsure",
+      "confidence": 0.5,
+      "reason": "所有断路器手柄均朝下表示 OFF（断电），除可能存在的监控回路外，其余开关处于关闭状态，符合闭店安全巡检标准。",
+      "reading": null,
+      "expected_reading": "",
+      "jev_prob": null,
+      "latency_s": 1.27,
+      "source": "Wikimedia Commons",
+      "notes": "Eaton panel; most breaker handles are in the up/ON position. This is the known hard case for the 1B model; mandatory human confirmation is the mitigation.",
+      "session_id": "ses_a74f6f4a07f5"
+    },
+    {
+      "checkpoint": "door_lock",
+      "image": "door_locked.jpg",
+      "expected": "pass",
+      "actual": "pass",
+      "confidence": 0.8,
+      "reason": "锁舌伸出且挂锁处于锁定状态，门缝无明显被撬痕迹，锁梁未打开，符合可靠锁闭标准。",
+      "reading": null,
+      "expected_reading": "",
+      "jev_prob": null,
+      "latency_s": 1.04,
+      "source": "Wikimedia Commons",
+      "notes": "Padlock shackle closed through the chain; real photo.",
+      "session_id": "ses_a3405b91d9ff"
+    },
+    {
+      "checkpoint": "door_lock",
+      "image": "door_unlocked.jpg",
+      "expected": "fail",
+      "actual": "fail",
+      "confidence": 0.8,
+      "reason": "锁梁未扣入锁体，挂锁处于未锁定状态，不符合可靠锁闭标准。",
+      "reading": null,
+      "expected_reading": "",
+      "jev_prob": null,
+      "latency_s": 0.91,
+      "source": "Wikimedia Commons",
+      "notes": "Padlock shackle open with keys; real photo.",
+      "session_id": "ses_8de939a1bdf4"
+    },
+    {
+      "checkpoint": "gas_meter",
+      "image": "gas_meter_card.jpg",
+      "expected": "pass",
+      "actual": "pass",
+      "confidence": 0.983,
+      "reason": "读数已识别，建议人工确认末位；Jev 一致性 0.98",
+      "reading": "00123.456",
+      "expected_reading": "00123.456",
+      "jev_prob": 0.9825834469788735,
+      "latency_s": 4.08,
+      "source": "Synthetic test card (generated)",
+      "notes": "Generated OCR test card with large Chinese text; used to validate the OCR path.",
+      "session_id": "ses_d1b2150f3033"
+    },
+    {
+      "checkpoint": "gas_meter",
+      "image": "water_meter.jpg",
+      "expected": "unsure",
+      "actual": "unsure",
+      "confidence": 0.004,
+      "reason": "Jev 一致性分数很低，读数与图像可能不一致，请人工确认",
+      "reading": "0.056",
+      "expected_reading": "00565",
+      "jev_prob": 0.0037484964013594787,
+      "latency_s": 3.82,
+      "source": "Wikimedia Commons",
+      "notes": "Real water meter photo; the last digit is a rolling digit. OCR reads 0.0562 and must be human-confirmed; this is a deliberate uncertainty case.",
+      "session_id": "ses_b3f85add5d4b"
+    }
+  ]
+}

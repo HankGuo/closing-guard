@@ -1,0 +1,65 @@
+id: restaurant_closing
+name: 餐饮门店闭店安全（三关一闭）
+version: 1
+description: >
+  面向街边小餐饮的闭店检查：关燃气、关电、关门，并记录燃气表读数。
+  每个检查点都由本地 MiniCPM 核验；不确定时必须重拍或人工确认。
+checkpoints:
+  - id: gas_valve
+    name: 燃气总阀
+    instruction: 将手机对准燃气总阀，确保阀门把手与管道完整入镜，手电已打开。
+    method: angle_vlm
+    reference: samples/gas_valve_closed.jpg
+    angle:
+      expected: 90
+      tolerance: 12
+    vlm_prompt: |
+      你是闭店安全巡检员。第一张图是该店燃气阀门的合格参考状态，第二张图是当前画面。
+      判断当前阀门是否处于关闭状态。合格标准：
+      1) 阀门把手与管道大致垂直（约 90°）；
+      2) 画面中没有火焰、烟雾或明显泄漏迹象；
+      3) 阀门本体完整、没有被遮挡。
+      如果画面中有明火、蓝色火焰或明显烟雾，必须返回 fail。
+      如果画面模糊、角度不对或被遮挡，返回 unsure，不要猜测。
+    remediation: 请将阀门把手转到与管道垂直（约 90°），确认无火焰后，再拍一张。
+    critical: true
+
+  - id: power_panel
+    name: 配电箱
+    instruction: 对准配电箱，确保所有开关和指示灯都能看清；冰箱、监控、消防回路可保留。
+    method: vlm
+    vlm_prompt: |
+      你是闭店安全巡检员。看图中的配电箱，判断是否已完成闭店断电。
+      合格标准：除冰箱、监控、消防等需要常开的回路外，其余开关处于 OFF（断电）位置。
+      断路器手柄朝上通常是 ON（通电），朝下是 OFF（断电）；以手柄位置和指示灯为准。
+      如果看到多个手柄朝上/指示灯亮，返回 fail。
+      如果看不清开关位置，返回 unsure。
+    remediation: 请关闭非必要回路的总闸，保留冰箱/监控/消防回路，再拍一张。
+    critical: true
+
+  - id: door_lock
+    name: 后门/总门门锁
+    instruction: 对准门锁或插销，确保锁舌/锁体完整入镜。
+    method: vlm
+    vlm_prompt: |
+      你是闭店安全巡检员。看图中的门锁，判断门是否已经可靠锁闭。
+      合格标准：锁舌伸出并进入锁扣，或挂锁/插销处于锁定状态；门缝没有明显被撬痕迹。
+      如果挂锁的锁梁是打开的（未扣入锁体），必须返回 fail。
+      如果看不清锁舌/锁梁位置，返回 unsure。
+    remediation: 请锁好门，把锁舌/插销拍清楚，再拍一张。
+    critical: true
+
+  - id: gas_meter
+    name: 燃气表读数
+    instruction: 对准燃气表数字盘，保持水平、避免反光；拍清楚整数位。
+    method: ocr
+    ocr_prompt: |
+      读取表盘主读数（整数位/小数位），忽略厂名、型号、序列号、量制编号、压力等级等无关文字。
+      只输出 JSON，字段 reading 和 unit。
+    ocr:
+      fields: [reading, unit]
+      unit: m³
+      roi: [0.033, 0.225, 0.633, 0.175]
+    vlm_prompt: ""
+    remediation: 请擦净表盘、避开反光，重新拍一张；如仍看不清，请人工抄读并备注。
+    critical: false
