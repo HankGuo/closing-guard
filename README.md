@@ -8,7 +8,8 @@
 >
 > 当前版本覆盖四项：燃气总阀、配电箱总闸、后门/总门门锁、燃气表读数。**“关水”尚未纳入**（在 [路线图](docs/ROADMAP.md) 里）。
 >
-> 它适合被当作“端侧 1B 模型能做什么、不能做什么”的工程样本，**不适合当作投资标的或直接售卖的产品**。
+> 它适合被当作“端侧 1B 模型能做什么、不能做什么”的工程样本，**不适合当作投资标的或直接售卖的产品**。>
+> **定位修正（2026-11）**：三方向调研后，更可行的路径是“传感器二值 + 低频拍照复核 + 台账服务”，而不是“AI 看阀门”。细节见 [事件触发巡检草案](docs/PIVOT-event-triggered.md)。
 
 [![CI](https://github.com/HankGuo/closing-guard/actions/workflows/ci.yml/badge.svg)](https://github.com/HankGuo/closing-guard/actions/workflows/ci.yml)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
