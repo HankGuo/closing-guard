@@ -1,7 +1,7 @@
 # Context7 documentation log
 
 Per the project request, library/API documentation was retrieved through
-**Context7** (`https://context7.com`) rather than relying on model memory. The
+**Context7** (`https://context7.com`) rather than relying on recall. The
 model-specific deployment details (GGUF names, mmproj, prompts) come from the
 official OpenBMB/MiniCPM repositories, because Context7 indexes library docs,
 not model weights or model cards.

@@ -11,7 +11,7 @@
 [![MiniCPM-OCR 1.0](https://img.shields.io/badge/MiniCPM--OCR-1.0-0f766e.svg)](https://github.com/OpenBMB/MiniCPM-OCR)
 [![MiniCPM-OCR Jev](https://img.shields.io/badge/MiniCPM--OCR-Jev-2B-0f766e.svg)](https://huggingface.co/openbmb/MiniCPM-OCR-Jev)
 
-[▶ 56 秒版](https://github.com/HankGuo/closing-guard/releases/download/v0.1.2/demo_v2.mp4) · [4 分钟完整版](https://github.com/HankGuo/closing-guard/releases/download/v0.1.2/demo.mp4) · [视频制作](docs/VIDEO.md)
+[▶ 观看 58 秒演示](https://github.com/HankGuo/closing-guard/releases/download/v0.1.3/demo_v2.mp4)
 
 ![Closing Guard home](docs/screenshots/web_01_home.png)
 
@@ -60,7 +60,7 @@
 
 > **它不是“又一个摄像头”。** 它不满足于“拍照留痕”，它会 **拒绝让你点完成**。
 
-![AI says no](docs/screenshots/android_02_gas_fail.png)
+![AI says no](docs/screenshots/web_03_camera_verdict.png)
 
 ---
 
@@ -212,7 +212,7 @@ App 是一个极薄的 WebView 壳：相机、屏幕、触摸来自手机，模�
 | 单元测试（CV / 链哈希） | `make test` | **8 passed** |
 | HTTP 端到端（真实模型） | `make e2e` | **1 passed in 14.38s** |
 | Android WebView 端到端 | `python scripts/android_e2e.py` | **ANDROID_E2E_OK**，哈希链 `valid=true` |
-| Android 相机路径 | 见 `docs/screenshots/android_08_camera.png` | 真实 `getUserMedia` 采集，`source=camera` |
+| Android WebView 渲染 | `docs/screenshots/` | 已用真机/模拟器验证页面能加载并完成核验流程；模拟器相机为虚拟场景，不作为实拍证据 |
 | 小样本评测 | `make eval` | **8 张图，87.5% 判定准确率，0 false pass**；OCR 测试卡 Jev **0.98**，真实水表 **0.004** → 人工；逐图延迟见 [`reports/eval.md`](reports/eval.md)（随缓存状态变化，非固定值） |
 
 ### 端到端测试做了什么
@@ -312,7 +312,6 @@ closing-guard/
 - [Prior art 与原创性边界](docs/PRIOR_ART.md)
 - [安全边界](docs/SAFETY.md)
 - [Context7 文档检索记录](docs/CONTEXT7.md)
-- [视频脚本与制作](docs/VIDEO.md)
 - [路线图](docs/ROADMAP.md)
 
 ---

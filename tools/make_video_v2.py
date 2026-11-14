@@ -177,10 +177,10 @@ def main():
     still(OUTDIR / "s4_numbers.png", 5.0, OUTDIR / "a4.mp4")
     segs.append(OUTDIR / "a4.mp4")
 
-    # 手机截图两帧
-    for name, out in [("android_02_gas_fail.png", "a5.mp4"), ("android_07_report.png", "a6.mp4")]:
+    # Web 端真实截图（真实样张上传，非模拟器虚拟相机）
+    for name, out in [("web_05_panel.png", "a5.mp4"), ("web_06_door.png", "a6.mp4"), ("web_08_report.png", "a6b.mp4")]:
         src = ROOT / "docs" / "screenshots" / name
-        run(["ffmpeg", "-y", "-loop", "1", "-t", "3.5", "-i", str(src),
+        run(["ffmpeg", "-y", "-loop", "1", "-t", "3.2", "-i", str(src),
              "-vf", f"scale=-2:{H-40},pad={W}:{H}:(ow-iw)/2:(oh-ih)/2:color=0x101214",
              "-c:v", "libx264", "-preset", "medium", "-crf", "20",
              "-pix_fmt", "yuv420p", "-r", "25", "-an", str(OUTDIR / out)])
