@@ -240,7 +240,9 @@ App 是一个极薄的 WebView 壳：相机、屏幕、触摸来自手机，模�
 | gas_meter | gas_meter_card.jpg | pass | pass | 0.983 |
 | gas_meter | water_meter.jpg | unsure | **unsure**（末位滚动，转人工） | 0.004 |
 
-完整结果：[`reports/eval.md`](reports/eval.md) / [`reports/eval.json`](reports/eval.json)。
+完整结果：[`reports/eval.md`](reports/eval.md)
+
+界面与文档配图使用 Wikimedia Commons 授权照片（CC0 / CC BY / 公有领域），归属见 [`data/reference/LICENSES.md`](data/reference/LICENSES.md)；这些是图库照片，不是作者实拍。 / [`reports/eval.json`](reports/eval.json)。
 
 > 这是 **8 张图的小样本试点**，不是统计显著的 benchmark。它故意包含对抗样本：明火、开锁、ON 配电箱、滚动末位水表。它证明的是“链路是通的、失败模式是可见的”，不是“模型已经安全”。
 
