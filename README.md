@@ -1,9 +1,14 @@
 # 打烊 · Closing Guard
 
-> **一个会拒绝签字的闭店安全 Agent。**  
-> 用闲置安卓手机 + 本地 MiniCPM，把“闭店安全检查”做成一条可核验、可追溯的任务链。
+> **一个本地优先的闭店检查记录工具（工程验证 Demo，非商业产品）。**
 >
-> 当前版本覆盖四项：燃气总阀、配电箱总闸、后门/总门门锁、燃气表读数。**“关水”尚未纳入**（在 [路线图](docs/ROADMAP.md) 里），不把没做的写成做了。
+> 用闲置安卓手机 + 本地 MiniCPM，把“拍几张照、留一份能查的记录”做成一条可复现的链路。
+>
+> **定位说清楚**：它做的是“事后留痕”，不是事前预防、也不是事中阻断。它不能替代可燃气体探测器、紧急切断阀或消防验收；也不解决“店员不想拍”的激励问题。
+>
+> 当前版本覆盖四项：燃气总阀、配电箱总闸、后门/总门门锁、燃气表读数。**“关水”尚未纳入**（在 [路线图](docs/ROADMAP.md) 里）。
+>
+> 它适合被当作“端侧 1B 模型能做什么、不能做什么”的工程样本，**不适合当作投资标的或直接售卖的产品**。
 
 [![CI](https://github.com/HankGuo/closing-guard/actions/workflows/ci.yml/badge.svg)](https://github.com/HankGuo/closing-guard/actions/workflows/ci.yml)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
